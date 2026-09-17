@@ -1,7 +1,78 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import AppearanceControls from '$lib/components/AppearanceControls.svelte';
 	import SystemGraphic from '$lib/components/SystemGraphic.svelte';
 	import ProjectVisual from '$lib/components/ProjectVisual.svelte';
 	import { profile, projects, experience } from '$lib/portfolio';
+	let monogram: HTMLDivElement;
+	const introText = 'I’m Gabriel Ivan, a software engineer turning complex problems into products that feel simple.';
+	let typedIntro = $state('');
+	onMount(() => {
+		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+		let typewriterTimer: ReturnType<typeof setTimeout> | undefined;
+		const typeIntro = (index = 0) => {
+			if (media.matches) {
+				typedIntro = introText;
+				return;
+			}
+			typedIntro = introText.slice(0, index);
+			if (index < introText.length) typewriterTimer = setTimeout(() => typeIntro(index + 1), 22);
+		};
+		typeIntro();
+		let scrollFrame = 0;
+		const updateParallax = () => {
+			scrollFrame = 0;
+			const rect = monogram.getBoundingClientRect();
+			const progress = media.matches
+				? 0
+				: Math.max(
+						-1,
+						Math.min(
+							1,
+							(window.innerHeight / 2 - rect.top - rect.height / 2) /
+								(window.innerHeight / 2 + rect.height / 2)
+						)
+					);
+			monogram.style.setProperty('--letter-shift', `${progress * -32}px`);
+			monogram.style.setProperty('--grid-shift', `${progress * 16}px`);
+		};
+		const scheduleParallax = () => {
+			if (!scrollFrame) scrollFrame = requestAnimationFrame(updateParallax);
+		};
+		window.addEventListener('scroll', scheduleParallax, { passive: true });
+		window.addEventListener('resize', scheduleParallax);
+		media.addEventListener('change', scheduleParallax);
+		updateParallax();
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					if (!media.matches) {
+						entry.target.animate(
+							[
+								{ opacity: 0.45, transform: 'translateY(14px)' },
+								{ opacity: 1, transform: 'translateY(0)' }
+							],
+							{ duration: 550, easing: 'cubic-bezier(.2,.7,.3,1)' }
+						);
+					}
+					observer.unobserve(entry.target);
+				}
+			},
+			{ threshold: 0.08 }
+		);
+		document
+			.querySelectorAll('.project, .about, .job, .contact')
+			.forEach((element) => observer.observe(element));
+		return () => {
+			observer.disconnect();
+			cancelAnimationFrame(scrollFrame);
+			clearTimeout(typewriterTimer);
+			window.removeEventListener('scroll', scheduleParallax);
+			window.removeEventListener('resize', scheduleParallax);
+			media.removeEventListener('change', scheduleParallax);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -16,7 +87,6 @@
 		content="Thoughtful interfaces. Resilient systems. Software engineering, from the foundation up."
 	/>
 	<meta property="og:type" content="website" />
-	<meta name="theme-color" content="#f6f6f2" />
 </svelte:head>
 
 <a class="skip-link" href="#main">Skip to content</a>
@@ -29,16 +99,14 @@
 				href="#contact">Contact <span>↗</span></a
 			>
 		</nav>
+		<AppearanceControls />
 	</header>
 	<main id="main">
 		<section class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
-				<div class="eyebrow"><span class="status-dot"></span> OPEN TO WORK & NEW POSSIBILITIES</div>
+				<div class="eyebrow">OPEN TO WORK & NEW POSSIBILITIES</div>
 				<h1 id="hero-title">Thoughtful<br />interfaces.<br /><span>Resilient systems.</span></h1>
-				<p class="intro">
-					I’m Gabriel Ivan, a software engineer turning<br class="desktop-break" /> complex problems into
-					products that feel simple.
-				</p>
+				<p class="intro" aria-label={introText}>{typedIntro}<span class="type-cursor" aria-hidden="true"></span></p>
 				<div class="hero-links">
 					<a class="primary-link" href="#work">Explore selected work <span>↘</span></a><span
 						class="small-note">5+ YEARS OF BUILDING WITH INTENT</span
@@ -99,8 +167,10 @@
 			<div class="about-left">
 				<span class="section-index">02 / THE PERSON BEHIND THE CODE</span>
 				<h2 id="about-title">Curious by nature.<br />Engineer by craft.</h2>
-				<div class="monogram" aria-hidden="true">
-					g<span>i</span><span class="monogram-cross">+</span><span class="monogram-label"
+				<div class="monogram" bind:this={monogram} aria-hidden="true">
+					<div class="monogram-grid"></div>
+					<div class="monogram-letters">g<span>i</span></div>
+					<span class="monogram-cross">+</span><span class="monogram-label"
 						>ALWAYS A WORK IN PROGRESS.</span
 					>
 				</div>
@@ -186,9 +256,70 @@
 			</div>
 		</section>
 		<section class="contact" id="contact" aria-labelledby="contact-title">
+			<svg class="contact-map" viewBox="0 0 560 320" fill="none" aria-hidden="true">
+				<defs>
+					<pattern id="map-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+						<path d="M28 0H0V28" stroke="currentColor" stroke-opacity=".15" />
+					</pattern>
+					<radialGradient id="map-glow">
+						<stop stop-color="#83bcb0" stop-opacity=".18" />
+						<stop offset="1" stop-color="#83bcb0" stop-opacity="0" />
+					</radialGradient>
+				</defs>
+				<ellipse cx="320" cy="202" rx="235" ry="117" fill="url(#map-glow)" />
+				<g transform="translate(10 60) skewX(-18) scale(1 .7)">
+					<path d="M65 35H545V320H65Z" fill="url(#map-grid)" />
+					<!-- Stylized Java coastline; the marker sits on the southern side of East Java. -->
+					<path
+						d="M68 105L92 92L121 111L151 110L175 123L204 119L229 135L263 134L287 143L310 137L334 150L359 142L383 156L412 149L438 170L468 168L489 193L480 208L452 197L430 205L405 194L382 195L357 182L331 185L309 174L284 179L259 168L234 169L211 153L189 157L164 140L143 142L123 125L97 128L76 117Z"
+						fill="currentColor"
+						fill-opacity=".05"
+						stroke="currentColor"
+						stroke-opacity=".55"
+					/>
+					<path
+						d="M349 126L378 118L402 124L425 120L443 131L421 137L397 131L375 135Z"
+						stroke="currentColor"
+						stroke-opacity=".35"
+					/>
+					<path
+						d="M120 113L144 141M204 124L210 151M284 143L280 173M335 151L330 182M383 158L382 191M434 171L427 198"
+						stroke="currentColor"
+						stroke-opacity=".2"
+						stroke-dasharray="3 4"
+					/>
+				</g>
+				<ellipse class="map-pulse" cx="321" cy="185" rx="27" ry="10" stroke="currentColor" />
+				<ellipse cx="321" cy="185" rx="13" ry="5" stroke="currentColor" opacity=".5" />
+				<path d="M321 182V131" stroke="currentColor" stroke-dasharray="2 4" />
+				<path
+					d="M321 139C318 134 310 127 310 121a11 11 0 0 1 22 0c0 6-8 13-11 18Z"
+					fill="#1b2727"
+					stroke="currentColor"
+				/>
+				<circle cx="321" cy="121" r="3" fill="currentColor" />
+				<path d="M336 121H367L379 109H479" stroke="currentColor" opacity=".55" />
+				<text
+					x="381"
+					y="101"
+					fill="currentColor"
+					font-family="monospace"
+					font-size="10"
+					letter-spacing="2">TULUNGAGUNG</text
+				>
+				<text
+					x="381"
+					y="126"
+					fill="currentColor"
+					opacity=".6"
+					font-family="monospace"
+					font-size="7"
+					letter-spacing="1">EAST JAVA / INDONESIA</text
+				>
+			</svg>
 			<div class="contact-top">
 				<span class="section-index">03 / WHAT’S NEXT?</span><span class="availability"
-					><span class="status-dot"></span> AVAILABLE FOR THE RIGHT OPPORTUNITY</span
+					>AVAILABLE FOR THE RIGHT OPPORTUNITY</span
 				>
 			</div>
 			<h2 id="contact-title">Great things start<br />with a conversation<span>.</span></h2>
@@ -218,11 +349,10 @@
 	}
 	:global(:root) {
 		font-family: Arial, Helvetica, sans-serif;
-		color: #242424;
-		background: #f6f6f2;
+		color: var(--fg);
+		background: var(--bg);
 		font-synthesis: none;
 		--mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-		--line: #d7d7d1;
 	}
 	:global(body) {
 		margin: 0;
@@ -242,12 +372,12 @@
 	}
 	:global(a:focus-visible),
 	:global(summary:focus-visible) {
-		outline: 2px solid #222;
+		outline: 2px solid var(--fg);
 		outline-offset: 6px;
 	}
 	:global(::selection) {
-		background: #252525;
-		color: #fff;
+		background: var(--fg);
+		color: var(--bg);
 	}
 	:global(p) {
 		line-height: 1.7;
@@ -263,8 +393,8 @@
 		left: 20px;
 		z-index: 10;
 		padding: 12px;
-		background: #222;
-		color: white;
+		background: var(--fg);
+		color: var(--bg);
 	}
 	.skip-link:focus {
 		top: 15px;
@@ -294,7 +424,7 @@
 		margin-left: 26px;
 	}
 	.header-title > span {
-		color: #777;
+		color: var(--quiet);
 	}
 	nav {
 		margin-left: auto;
@@ -306,7 +436,7 @@
 	}
 	nav > a > span {
 		font: 8px var(--mono);
-		color: #777;
+		color: var(--quiet);
 		vertical-align: super;
 		margin-left: 6px;
 	}
@@ -320,6 +450,29 @@
 		align-items: center;
 		padding: 55px 0 48px;
 		gap: 12px;
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+	}
+	.hero::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		inset: 0;
+		background: linear-gradient(115deg, transparent 24%, var(--surface) 50%, transparent 74%);
+		background-size: 220% 100%;
+		opacity: 0.22;
+		animation: ambient-sweep 16s ease-in-out infinite;
+	}
+	.hero-copy,
+	.hero-art {
+		position: relative;
+		z-index: 1;
+	}
+	@keyframes ambient-sweep {
+		50% {
+			background-position: 100% 0;
+		}
 	}
 	.eyebrow,
 	.section-index {
@@ -331,14 +484,6 @@
 		align-items: center;
 		gap: 9px;
 	}
-	.status-dot {
-		width: 6px;
-		height: 6px;
-		background: currentColor;
-		border-radius: 50%;
-		display: inline-block;
-		flex-shrink: 0;
-	}
 	.hero h1 {
 		font-size: clamp(48px, 5.3vw, 82px);
 		font-weight: 500;
@@ -347,11 +492,25 @@
 		margin: 30px 0 24px;
 	}
 	.hero h1 > span {
-		color: #8b8b84;
+		color: var(--muted);
 	}
 	.intro {
 		font-size: 14px;
-		color: #65655f;
+		color: var(--muted);
+	}
+	.type-cursor {
+		display: inline-block;
+		width: 1px;
+		height: 1.1em;
+		margin-left: 2px;
+		vertical-align: -0.15em;
+		background: currentColor;
+		animation: blink 0.75s steps(1) infinite;
+	}
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
 	}
 	.hero-links {
 		display: flex;
@@ -361,7 +520,7 @@
 	}
 	.primary-link {
 		font-size: 11px;
-		border-bottom: 1px solid #333;
+		border-bottom: 1px solid var(--fg);
 		padding: 0 0 9px;
 		display: flex;
 		gap: 27px;
@@ -373,7 +532,7 @@
 	.small-note {
 		font: 8px/1.7 var(--mono);
 		letter-spacing: 0.04em;
-		color: #777;
+		color: var(--quiet);
 	}
 	.hero-links > .small-note {
 		max-width: 112px;
@@ -390,7 +549,7 @@
 		padding: 18px 0;
 		font: 8px var(--mono);
 		letter-spacing: 0.06em;
-		color: #6b6b64;
+		color: var(--muted);
 	}
 	.hero-bottom a > span {
 		margin-left: 30px;
@@ -415,11 +574,11 @@
 	}
 	.section-heading > p {
 		font-size: 12px;
-		color: #70706a;
+		color: var(--muted);
 		margin-bottom: 3px;
 	}
 	.period {
-		color: #999;
+		color: var(--quiet);
 	}
 	.project {
 		display: grid;
@@ -442,7 +601,7 @@
 		gap: 10px;
 		font: 7px/1.5 var(--mono);
 		letter-spacing: 0.03em;
-		color: #73736d;
+		color: var(--muted);
 	}
 	.company {
 		font-size: 11px;
@@ -458,7 +617,7 @@
 	}
 	.project-description {
 		font-size: 12px;
-		color: #70706a;
+		color: var(--muted);
 		margin: 15px 0;
 		max-width: 390px;
 	}
@@ -470,9 +629,9 @@
 	.tags > span {
 		font: 8px var(--mono);
 		padding: 5px 8px;
-		border: 1px solid #d6d6cf;
+		border: 1px solid var(--line);
 		border-radius: 2px;
-		color: #666;
+		color: var(--muted);
 	}
 	.outcome {
 		display: flex;
@@ -488,7 +647,7 @@
 	.outcome > span {
 		font: 7px/1.6 var(--mono);
 		max-width: 115px;
-		color: #777;
+		color: var(--quiet);
 		letter-spacing: 0.04em;
 	}
 	details {
@@ -515,7 +674,7 @@
 	}
 	.project-details {
 		font-size: 12px;
-		color: #666;
+		color: var(--muted);
 	}
 	.project-details ul {
 		padding-left: 17px;
@@ -535,17 +694,19 @@
 	}
 	.about-copy > p {
 		font-size: 13px;
-		color: #6a6a64;
+		color: var(--muted);
 		margin: 0 0 18px;
 	}
 	.about-copy > .about-lead {
 		font-size: 21px;
-		color: #333;
+		color: var(--fg);
 		line-height: 1.4;
 		letter-spacing: -0.5px;
 		margin-bottom: 25px;
 	}
 	.monogram {
+		overflow: hidden;
+		isolation: isolate;
 		height: 260px;
 		width: 85%;
 		position: relative;
@@ -556,27 +717,36 @@
 		letter-spacing: -25px;
 		line-height: 220px;
 		text-align: center;
+	}
+	.monogram-grid {
+		position: absolute;
+		inset: -40px;
+		z-index: -1;
+		transform: translateY(var(--grid-shift, 0px));
 		background:
 			repeating-linear-gradient(
 				0deg,
 				transparent,
 				transparent 25px,
-				#deded740 25px,
-				#deded740 26px
+				var(--line) 25px,
+				var(--line) 26px
 			),
 			repeating-linear-gradient(
 				90deg,
 				transparent,
 				transparent 25px,
-				#deded740 25px,
-				#deded740 26px
+				var(--line) 25px,
+				var(--line) 26px
 			);
 	}
-	.monogram > span:first-child {
+	.monogram-letters {
+		transform: translateY(var(--letter-shift, 0px));
+	}
+	.monogram-letters > span {
 		font-family: Georgia, serif;
 		font-style: italic;
 		font-weight: 400;
-		color: #91918b;
+		color: var(--muted);
 	}
 	.monogram-cross {
 		position: absolute;
@@ -584,7 +754,7 @@
 		right: 15px;
 		font: 20px var(--mono);
 		letter-spacing: 0;
-		color: #888;
+		color: var(--quiet);
 	}
 	.monogram-label {
 		position: absolute;
@@ -592,7 +762,7 @@
 		left: 18px;
 		font: 7px var(--mono);
 		letter-spacing: 0.1em;
-		color: #777;
+		color: var(--quiet);
 	}
 	.expertise {
 		margin-top: 28px;
@@ -608,7 +778,7 @@
 		left: 0;
 		top: 17px;
 		font: 8px var(--mono);
-		color: #888;
+		color: var(--quiet);
 	}
 	.expertise h3 {
 		font-size: 12px;
@@ -617,7 +787,7 @@
 	}
 	.expertise p {
 		font: 9px/1.7 var(--mono);
-		color: #777;
+		color: var(--quiet);
 		margin: 7px 0 0;
 	}
 	.experience {
@@ -638,7 +808,7 @@
 	}
 	.job-period {
 		font: 8px/1.7 var(--mono);
-		color: #777;
+		color: var(--quiet);
 	}
 	.job h3 {
 		font-size: 16px;
@@ -648,7 +818,7 @@
 	}
 	.job p {
 		font-size: 11px;
-		color: #777;
+		color: var(--quiet);
 		margin: 0;
 		max-width: 290px;
 	}
@@ -658,7 +828,7 @@
 		margin: 0;
 		font-size: 10px;
 		line-height: 1.8;
-		color: #62625c;
+		color: var(--muted);
 	}
 	.job li + li {
 		margin-top: 5px;
@@ -678,7 +848,7 @@
 	}
 	.credentials p {
 		font-size: 11px;
-		color: #777;
+		color: var(--quiet);
 		margin: 0;
 	}
 	.credentials a {
@@ -692,7 +862,7 @@
 		margin-top: 9px;
 	}
 	.credentials a > span {
-		color: #777;
+		color: var(--quiet);
 		font: 8px var(--mono);
 	}
 	.credentials .additional-cert {
@@ -700,10 +870,45 @@
 		font-size: 10px;
 	}
 	.contact {
-		background: #232323;
-		color: #f4f4ed;
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		background: var(--contact-bg);
+		color: var(--contact-fg);
 		padding: 40px 43px 24px;
 		margin: 5px 0 0;
+	}
+	.contact-map {
+		position: absolute;
+		z-index: -1;
+		pointer-events: none;
+		right: -15px;
+		bottom: 35px;
+		width: min(55%, 600px);
+		color: #83bcb0;
+		opacity: 0.55;
+	}
+	.map-pulse {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: map-beacon 4s ease-out infinite;
+	}
+	@keyframes map-beacon {
+		from {
+			transform: scale(0.6);
+			opacity: 0.8;
+		}
+		to {
+			transform: scale(1.8);
+			opacity: 0;
+		}
+	}
+	@media (max-width: 720px) {
+		.contact-map {
+			width: 95%;
+			right: -65px;
+			opacity: 0.3;
+		}
 	}
 	.contact-top {
 		display: flex;
@@ -711,19 +916,12 @@
 		gap: 20px;
 	}
 	.contact-top .section-index {
-		color: #aaa;
+		color: var(--contact-muted);
 	}
 	.availability {
 		font: 7px var(--mono);
 		letter-spacing: 0.05em;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		color: #ccc;
-	}
-	.availability .status-dot {
-		width: 4px;
-		height: 4px;
+		color: var(--contact-muted);
 	}
 	.contact h2 {
 		font-size: clamp(40px, 5.3vw, 74px);
@@ -732,7 +930,7 @@
 		margin-top: 49px;
 	}
 	.contact h2 > span {
-		color: #888;
+		color: var(--quiet);
 	}
 	.contact-bottom {
 		display: flex;
@@ -743,12 +941,12 @@
 	}
 	.contact-bottom > p {
 		font-size: 12px;
-		color: #aaa;
+		color: var(--contact-muted);
 		margin: 0;
 	}
 	.contact-bottom > a {
 		font-size: 20px;
-		border-bottom: 1px solid #888;
+		border-bottom: 1px solid var(--quiet);
 		padding-bottom: 12px;
 		min-width: 230px;
 		display: flex;
@@ -759,15 +957,15 @@
 		line-height: 0.8;
 	}
 	.contact-location {
-		border-top: 1px solid #484842;
+		border-top: 1px solid var(--contact-line);
 		padding-top: 18px;
 		display: flex;
 		justify-content: space-between;
 		font: 8px var(--mono);
-		color: #aaa;
+		color: var(--contact-muted);
 	}
 	.contact :global(a:focus-visible) {
-		outline-color: white;
+		outline-color: var(--bg);
 	}
 	footer {
 		display: flex;
@@ -776,7 +974,7 @@
 		padding: 28px 0 30px;
 		font: 7px var(--mono);
 		letter-spacing: 0.04em;
-		color: #777;
+		color: var(--quiet);
 	}
 	@media (min-width: 1400px) {
 		.hero {
@@ -1034,13 +1232,75 @@
 		footer > span:nth-child(2) {
 			display: none;
 		}
-		.desktop-break {
-			display: none;
-		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		:global(html) {
 			scroll-behavior: auto;
+		}
+		.type-cursor {
+			animation: none;
+		}
+	}
+
+	.hero-copy > * {
+		animation: hero-enter 0.7s both cubic-bezier(0.2, 0.7, 0.3, 1);
+	}
+	.hero-copy > :nth-child(2) {
+		animation-delay: 0.08s;
+	}
+	.hero-copy > :nth-child(3) {
+		animation-delay: 0.16s;
+	}
+	.hero-copy > :nth-child(4) {
+		animation-delay: 0.24s;
+	}
+	.hero-art {
+		animation: hero-enter 1s both 0.12s;
+	}
+	.primary-link > span,
+	.contact-bottom > a > span {
+		transition: transform 0.25s ease;
+	}
+	.primary-link:hover > span {
+		transform: translate(3px, 3px);
+	}
+	.contact-bottom > a:hover > span {
+		transform: translate(3px, -3px);
+	}
+	.expand-icon {
+		transition: transform 0.2s ease;
+	}
+	.contact .contact-top .section-index,
+	.contact .contact-bottom p,
+	.contact .contact-location {
+		color: var(--contact-muted);
+	}
+	.contact-bottom > a {
+		border-color: var(--contact-line);
+	}
+	@keyframes hero-enter {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	:global(html[data-motion='paused']) .hero-copy > *,
+	:global(html[data-motion='paused']) .hero-art {
+		animation: none;
+	}
+	@media (max-width: 720px) {
+		.header-title {
+			display: none;
+		}
+		nav {
+			gap: 16px;
+		}
+		.hero-art {
+			margin-top: 25px;
 		}
 	}
 </style>

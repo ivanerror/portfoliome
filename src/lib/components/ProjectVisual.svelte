@@ -26,9 +26,9 @@
 			<div class="dash-grid">
 				<div class="chart">
 					<span>PORTFOLIO PERFORMANCE</span><svg viewBox="0 0 240 90"
-						><path d="M0 80H240M0 50H240M0 20H240" stroke="#ddd" fill="none" /><path
+						><path d="M0 80H240M0 50H240M0 20H240" stroke="var(--art-line)" fill="none" /><path
 							d="M0 75L22 64L41 70L62 44L83 51L105 35L128 43L150 20L170 27L191 12L211 20L240 3"
-							stroke="#333"
+							stroke="var(--art-ink)"
 							stroke-width="2"
 							fill="none"
 						/></svg
@@ -104,10 +104,10 @@
 <style>
 	.visual {
 		height: 330px;
-		background: #eaeae5;
+		background: var(--art-bg);
 		position: relative;
 		overflow: hidden;
-		border: 1px solid #deded8;
+		border: 1px solid var(--art-line);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -121,7 +121,7 @@
 		justify-content: space-between;
 		font: 8px var(--mono);
 		letter-spacing: 0.1em;
-		color: #686862;
+		color: var(--muted);
 	}
 	.visual-meta > span:last-child {
 		font-size: 17px;
@@ -132,22 +132,24 @@
 		left: 22px;
 		font: 7px var(--mono);
 		letter-spacing: 0.12em;
-		color: #777;
+		color: var(--art-mid);
 	}
 	.dashboard {
 		width: 76%;
-		background: #fafaf7;
-		border: 1px solid #bcbcb7;
+		background: var(--art-paper);
+		border: 1px solid var(--art-line);
 		transform: perspective(700px) rotateY(-9deg) rotateX(10deg) rotateZ(-3deg);
 		box-shadow: 15px 20px 0 #00000006;
 		padding: 12px;
+		animation: dashboard-float 7s ease-in-out infinite;
+		transform-origin: 50% 55%;
 	}
 	.dash-bar {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		font: 6px var(--mono);
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid var(--art-line);
 		padding-bottom: 9px;
 	}
 	.mini-logo {
@@ -160,7 +162,7 @@
 		margin-top: 8px;
 	}
 	.dash-grid > div {
-		border: 1px solid #ddd;
+		border: 1px solid var(--art-line);
 		padding: 9px;
 	}
 	.dash-grid span {
@@ -172,25 +174,38 @@
 		width: 100%;
 		margin-top: 14px;
 	}
+	.chart path:last-child {
+		stroke-dasharray: 330;
+		stroke-dashoffset: 330;
+		animation: chart-trace 5s ease-in-out infinite;
+	}
 	.donut {
 		width: 49px;
 		height: 49px;
-		border: 10px solid #333;
-		border-right-color: #aaa;
-		border-bottom-color: #ddd;
+		border: 10px solid var(--art-ink);
+		border-right-color: var(--art-mid);
+		border-bottom-color: var(--art-line);
 		border-radius: 50%;
 		margin: 12px auto 0;
+		animation: donut-turn 9s linear infinite;
 	}
 	.table-row {
 		display: flex;
 		gap: 12px;
 		padding: 7px 0;
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid var(--art-paper);
 	}
 	.table-row i {
 		height: 3px;
-		background: #ccc;
+		background: var(--art-soft);
 		width: 30%;
+		animation: row-pulse 3s ease-in-out infinite;
+	}
+	.table-row:nth-of-type(3) i {
+		animation-delay: 0.35s;
+	}
+	.table-row:nth-of-type(4) i {
+		animation-delay: 0.7s;
 	}
 	.mini-chart > div {
 		height: 42px;
@@ -201,41 +216,51 @@
 	}
 	.mini-chart i {
 		flex: 1;
-		background: #777;
+		background: var(--art-mid);
+		transform-origin: bottom;
+		animation: bar-breathe 2.8s ease-in-out infinite alternate;
+	}
+	.mini-chart i:nth-child(2n) {
+		animation-delay: -1.2s;
 	}
 	.mobile {
-		background: #e3e3df;
+		background: var(--art-bg);
 	}
 	.orbit {
 		position: absolute;
-		border: 1px solid #cecec7;
+		border: 1px solid var(--art-line);
 		border-radius: 50%;
 		width: 380px;
 		height: 380px;
 		transform: rotateX(50deg) rotateZ(-25deg);
+		animation: orbit-drift 14s linear infinite;
 	}
 	.orbit-two {
 		width: 480px;
 		height: 480px;
+		animation-direction: reverse;
+		animation-duration: 19s;
 	}
 	.phone {
 		width: 130px;
 		height: 244px;
-		border: 4px solid #333;
+		border: 4px solid var(--art-ink);
 		border-radius: 22px;
-		background: #fafaf7;
+		background: var(--art-paper);
 		padding: 20px 11px 10px;
 		position: absolute;
 		box-shadow: 10px 15px 22px #00000010;
 	}
 	.phone-back {
 		transform: rotate(-12deg) translate(-57px, 8px);
+		animation: phone-back-float 6s ease-in-out infinite;
 	}
 	.phone-front {
 		transform: rotate(10deg) translate(65px, 13px);
-		background: #252525;
-		color: white;
-		border-color: #4b4b48;
+		background: var(--inverse);
+		color: var(--inverse-text);
+		border-color: var(--art-mid);
+		animation: phone-front-float 6s ease-in-out infinite -2.2s;
 	}
 	.notch {
 		position: absolute;
@@ -244,10 +269,10 @@
 		left: calc(50% - 17px);
 		top: 6px;
 		border-radius: 8px;
-		background: #333;
+		background: var(--art-ink);
 	}
 	.phone-front .notch {
-		background: #111;
+		background: var(--inverse);
 	}
 	.phone-header {
 		font-size: 13px;
@@ -256,7 +281,7 @@
 		font-weight: 600;
 	}
 	.phone-card {
-		background: #eaeae4;
+		background: var(--surface-raised);
 		margin-top: 12px;
 		padding: 9px;
 	}
@@ -277,13 +302,18 @@
 	}
 	.bars i {
 		flex: 1;
-		background: #777;
+		background: var(--art-mid);
+		transform-origin: bottom;
+		animation: bar-breathe 2.2s ease-in-out infinite alternate;
+	}
+	.bars i:nth-child(2n) {
+		animation-delay: -1s;
 	}
 	.phone-lines {
 		margin-top: 12px;
 		height: 17px;
-		border-top: 3px solid #ddd;
-		border-bottom: 3px solid #ddd;
+		border-top: 3px solid var(--art-line);
+		border-bottom: 3px solid var(--art-line);
 	}
 	.feedback-icon {
 		font-size: 43px;
@@ -292,32 +322,33 @@
 	.feedback-faces {
 		font-size: 20px;
 		margin-top: 18px;
-		color: #bbb;
+		color: var(--art-soft);
 	}
 	.phone-button {
 		font: 5px var(--mono);
-		background: #eee;
-		color: #222;
+		background: var(--art-paper);
+		color: var(--fg);
 		padding: 9px 5px;
 		margin-top: 18px;
 		text-align: center;
 	}
 	.pos {
-		background: #e8e8e2;
+		background: var(--art-bg);
 	}
 	.terminal {
 		width: 70%;
 		transform: translateY(10px) rotate(-3deg);
 		position: relative;
+		animation: terminal-float 6s ease-in-out infinite;
 	}
 	.terminal-screen {
-		background: #333;
-		border: 6px solid #333;
+		background: var(--art-ink);
+		border: 6px solid var(--art-ink);
 		border-radius: 8px;
 	}
 	.terminal-head {
 		font-size: 9px;
-		background: #f3f3ee;
+		background: var(--art-paper);
 		padding: 10px;
 		display: flex;
 		justify-content: space-between;
@@ -328,7 +359,7 @@
 	}
 	.terminal-body {
 		display: flex;
-		background: #f3f3ee;
+		background: var(--art-paper);
 		padding: 0 10px 10px;
 		gap: 10px;
 	}
@@ -339,7 +370,7 @@
 		width: 65%;
 	}
 	.product-grid > div {
-		background: #e3e3dc;
+		background: var(--surface-raised);
 		height: 43px;
 		display: grid;
 		place-items: center;
@@ -349,32 +380,37 @@
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
-		background: #bbb;
+		background: var(--art-soft);
+		animation: product-ping 3.6s ease-in-out infinite;
+	}
+	.product-grid > div:nth-child(2n) .product-shape {
+		animation-delay: -1.4s;
 	}
 	.product-grid > div:nth-child(2n) .product-shape {
 		border-radius: 2px;
-		background: #999;
+		background: var(--art-mid);
 	}
 	.product-grid i {
 		height: 2px;
 		width: 20px;
-		background: #bbb;
+		background: var(--art-soft);
 	}
 	.receipt {
 		flex: 1;
-		border: 1px solid #ddd;
+		border: 1px solid var(--art-line);
 		padding: 8px;
 		font: 5px var(--mono);
+		animation: receipt-in 5s ease-in-out infinite;
 	}
 	.receipt > i {
 		height: 3px;
-		background: #ddd;
+		background: var(--art-line);
 		display: block;
 		margin-top: 9px;
 	}
 	.receipt > div {
-		background: #333;
-		color: white;
+		background: var(--inverse);
+		color: var(--inverse-text);
 		padding: 6px 2px;
 		margin-top: 15px;
 		text-align: center;
@@ -383,23 +419,23 @@
 	.stand {
 		width: 35px;
 		height: 33px;
-		background: linear-gradient(#777, #aaa);
+		background: linear-gradient(var(--art-mid), var(--art-mid));
 		margin: auto;
 		transform: skewX(-8deg);
 	}
 	.stand-foot {
 		height: 5px;
 		width: 105px;
-		background: #aaa;
+		background: var(--art-mid);
 		margin: auto;
 		border-radius: 50%;
 	}
 	.node {
 		position: absolute;
 		font: 6px var(--mono);
-		border: 1px solid #aaa;
+		border: 1px solid var(--art-mid);
 		padding: 9px;
-		background: #f8f8f2;
+		background: var(--art-paper);
 		z-index: 1;
 	}
 	.node b {
@@ -408,10 +444,95 @@
 	.node-a {
 		top: 65px;
 		right: 25px;
+		animation: node-pulse 4s ease-in-out infinite;
 	}
 	.node-b {
 		bottom: 48px;
 		left: 25px;
+		animation: node-pulse 4s ease-in-out infinite -2s;
+	}
+	.pos-network::before {
+		content: '';
+		position: absolute;
+		width: 165px;
+		height: 105px;
+		left: 75px;
+		top: 90px;
+		border-left: 1px dashed var(--art-mid);
+		border-bottom: 1px dashed var(--art-mid);
+		opacity: 0.5;
+		animation: connection-fade 3s ease-in-out infinite;
+	}
+	@keyframes dashboard-float {
+		50% {
+			transform: perspective(700px) rotateY(-7deg) rotateX(8deg) rotateZ(-1deg) translateY(-7px);
+		}
+	}
+	@keyframes chart-trace {
+		45%,
+		100% {
+			stroke-dashoffset: 0;
+		}
+	}
+	@keyframes donut-turn {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@keyframes row-pulse {
+		50% {
+			opacity: 0.42;
+			transform: scaleX(0.76);
+			transform-origin: left;
+		}
+	}
+	@keyframes bar-breathe {
+		to {
+			transform: scaleY(0.72);
+		}
+	}
+	@keyframes orbit-drift {
+		to {
+			transform: rotateX(50deg) rotateZ(335deg);
+		}
+	}
+	@keyframes phone-back-float {
+		50% {
+			transform: rotate(-8deg) translate(-62px, -2px);
+		}
+	}
+	@keyframes phone-front-float {
+		50% {
+			transform: rotate(6deg) translate(68px, 3px);
+		}
+	}
+	@keyframes terminal-float {
+		50% {
+			transform: translateY(2px) rotate(-1deg);
+		}
+	}
+	@keyframes product-ping {
+		50% {
+			transform: scale(0.72);
+			opacity: 0.55;
+		}
+	}
+	@keyframes receipt-in {
+		50% {
+			transform: translateY(-5px);
+			box-shadow: 0 6px 0 #0000000d;
+		}
+	}
+	@keyframes node-pulse {
+		50% {
+			transform: translateY(-5px);
+			box-shadow: 0 0 0 5px #ffffff08;
+		}
+	}
+	@keyframes connection-fade {
+		50% {
+			opacity: 0.15;
+		}
 	}
 	@media (min-width: 1400px) {
 		.visual {
