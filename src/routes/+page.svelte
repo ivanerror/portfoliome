@@ -132,8 +132,10 @@
 			</div>
 			<div class="project-list">
 				{#each projects as project (project.number)}
-					<article class="project">
-						<div class="project-art"><ProjectVisual variant={project.variant} /></div>
+					<article class="project" class:text-only={!project.variant}>
+						{#if project.variant}
+							<div class="project-art"><ProjectVisual variant={project.variant} /></div>
+						{/if}
 						<div class="project-copy">
 							<div class="project-meta">
 								<span>{project.number} / {project.category}</span><span>{project.year}</span>
@@ -594,6 +596,17 @@
 		padding: 35px 0;
 		border-top: 1px solid var(--line);
 		align-items: start;
+	}
+	.project-list {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: 55px;
+	}
+	.project:not(.text-only) {
+		grid-column: 1 / -1;
+	}
+	.project.text-only {
+		grid-template-columns: 1fr;
 	}
 	.project:first-child {
 		padding-top: 0;
@@ -1123,8 +1136,11 @@
 		.section-heading > p {
 			margin: 0;
 		}
+		.project-list,
 		.project {
 			grid-template-columns: 1fr;
+		}
+		.project {
 			gap: 25px;
 			padding: 30px 0;
 		}

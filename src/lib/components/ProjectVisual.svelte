@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Project } from '$lib/portfolio';
-	let { variant }: { variant: Project['variant'] } = $props();
+	let { variant }: { variant: NonNullable<Project['variant']> } = $props();
 </script>
 
 <div

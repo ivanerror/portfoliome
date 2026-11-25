@@ -17,7 +17,8 @@ export type Project = {
 	outcomeLabel: string;
 	context: string;
 	contributions: string[];
-	variant: 'grid' | 'mobile' | 'pos';
+	/** Only featured projects get a visual; the rest render as text cards. */
+	variant?: 'grid' | 'mobile' | 'pos';
 };
 
 export const projects: Project[] = [
@@ -46,71 +47,6 @@ export const projects: Project[] = [
 	},
 	{
 		number: '02',
-		name: 'Private conversations.\nProvable by design.',
-		company: 'RADSoft · ChatHub',
-		year: 'APR 2026 — PRESENT',
-		category: 'BACKEND & SECURITY',
-		description:
-			'A multi-tenant realtime chat service for financial-services clients, including Allianz Life and Mandiri FA.',
-		tags: ['.NET 10', 'gRPC', 'WebSocket', 'PostgreSQL', 'Redis'],
-		outcome: 'Audit-ready.',
-		outcomeLabel: 'HASH-CHAINED LOG, VERIFIED DAILY',
-		variant: 'grid',
-		context:
-			'Financial clients needed realtime messaging they could trust and audit. I co-built ChatHub from the ground up, from service boundaries to production deployment.',
-		contributions: [
-			'Co-built the pairing API, WebSocket gateway, and background worker, communicating over gRPC.',
-			'Secured messaging with OpenBao-wrapped room keys and key rotation, ES256 tenant-signed tokens, and a hash-chained audit log with daily verification.',
-			'Built admin offboarding tooling (void admin, password and TOTP reset) with audit logging and integration tests.',
-			'Shipped the production deployment (Docker Compose, Caddy, backup scripts) and GitHub Actions publish / rollback pipelines.'
-		]
-	},
-	{
-		number: '03',
-		name: 'Paperwork, signed\nand sealed in the browser.',
-		company: 'Hermes E-Office',
-		year: 'SEP 2025 — PRESENT',
-		category: 'FULL-STACK PRODUCT',
-		description:
-			'A multi-tenant e-office platform for Indonesian organisations, from drafting a letter to a verifiable final PDF.',
-		tags: ['SvelteKit', 'Bun', 'Elysia', 'PostgreSQL', 'Flutter'],
-		outcome: '~87%',
-		outcomeLabel: 'OF 200+ COMMITS AS LEAD DEVELOPER',
-		variant: 'grid',
-		context:
-			'Hermes replaces paper-based correspondence for organisations with real approval hierarchies. As lead developer, I own it end to end across web, mobile, data, and deployment.',
-		contributions: [
-			'Built the end-to-end letter workflow: DOCX templates, in-browser ONLYOFFICE editing with immutable revisions, layered approval routes following the org position tree, and tamper-evident PDFs with QR verification stamps.',
-			'Designed the multi-tenant PostgreSQL schema (62 tables) with forced Row-Level Security, plus a CI job that applies every migration to a real database.',
-			'Developed the inbox and disposition module, audit trail, per-tenant RBAC, and an email worker with safe retries and bounce tracking.',
-			'Built the Flutter mobile app with Play Integrity–attested sign-in and Firebase push notifications.',
-			'Set up CI/CD, versioned releases, and per-client deployments, backed by 92 unit, integration, and Playwright e2e test files.'
-		]
-	},
-	{
-		number: '04',
-		name: 'Project management\nthat talks back.',
-		company: 'Poru',
-		year: 'SEP 2025 — PRESENT',
-		category: 'AI PRODUCT ENGINEERING',
-		description:
-			'An AI-powered ticketing and project management platform, with agents that can search, plan, and report.',
-		tags: ['Next.js 16', 'LangGraph', 'Supabase', 'pgvector'],
-		outcome: '~93%',
-		outcomeLabel: 'OF 500+ COMMITS AS LEAD DEVELOPER',
-		variant: 'grid',
-		context:
-			'Poru grew from a ticketing tool into a platform with 47 pages, 58 API routes, and 65 migrations. I lead its development and its AI integration.',
-		contributions: [
-			'Built an agentic AI chat on LangGraph with tool calling and generative UI.',
-			'Built hybrid ticket search (pgvector + full-text + reciprocal rank fusion), kept fresh by an embedding queue.',
-			'Built Temporal Loom: a WBS tree with drag-and-drop, progress rollup, daily snapshots, S-curve reports, Excel export, and Google Sheets sync.',
-			'Built an MCP server exposing tickets and project data to AI agents over OAuth, plus two-way Freedcamp sync via an idempotent job queue.',
-			'Covered the platform with 129 Vitest unit-test files.'
-		]
-	},
-	{
-		number: '05',
 		name: 'Small interactions.\nMeaningful merchant impact.',
 		company: 'Grab · Mex app',
 		year: '2024 — 2025',
@@ -131,7 +67,7 @@ export const projects: Project[] = [
 		]
 	},
 	{
-		number: '06',
+		number: '03',
 		name: 'Less friction.\nMore business as usual.',
 		company: 'Grab · POS & Onboarding',
 		year: '2022 — 2024',
@@ -153,6 +89,68 @@ export const projects: Project[] = [
 		]
 	},
 	{
+		number: '04',
+		name: 'Private conversations.\nProvable by design.',
+		company: 'RADSoft · ChatHub',
+		year: 'APR 2026 — PRESENT',
+		category: 'BACKEND & SECURITY',
+		description:
+			'A multi-tenant realtime chat service for financial-services clients, including Allianz Life and Mandiri FA.',
+		tags: ['.NET 10', 'gRPC', 'WebSocket', 'PostgreSQL', 'Redis'],
+		outcome: 'Audit-ready.',
+		outcomeLabel: 'HASH-CHAINED LOG, VERIFIED DAILY',
+		context:
+			'Financial clients needed realtime messaging they could trust and audit. I co-built ChatHub from the ground up, from service boundaries to production deployment.',
+		contributions: [
+			'Co-built the pairing API, WebSocket gateway, and background worker, communicating over gRPC.',
+			'Secured messaging with OpenBao-wrapped room keys and key rotation, ES256 tenant-signed tokens, and a hash-chained audit log with daily verification.',
+			'Built admin offboarding tooling (void admin, password and TOTP reset) with audit logging and integration tests.',
+			'Shipped the production deployment (Docker Compose, Caddy, backup scripts) and GitHub Actions publish / rollback pipelines.'
+		]
+	},
+	{
+		number: '05',
+		name: 'Paperwork, signed\nand sealed in the browser.',
+		company: 'Hermes E-Office',
+		year: 'SEP 2025 — PRESENT',
+		category: 'FULL-STACK PRODUCT',
+		description:
+			'A multi-tenant e-office platform for Indonesian organisations, from drafting a letter to a verifiable final PDF.',
+		tags: ['SvelteKit', 'Bun', 'Elysia', 'PostgreSQL', 'Flutter'],
+		outcome: '~87%',
+		outcomeLabel: 'OF 200+ COMMITS AS LEAD DEVELOPER',
+		context:
+			'Hermes replaces paper-based correspondence for organisations with real approval hierarchies. As lead developer, I own it end to end across web, mobile, data, and deployment.',
+		contributions: [
+			'Built the end-to-end letter workflow: DOCX templates, in-browser ONLYOFFICE editing with immutable revisions, layered approval routes following the org position tree, and tamper-evident PDFs with QR verification stamps.',
+			'Designed the multi-tenant PostgreSQL schema (62 tables) with forced Row-Level Security, plus a CI job that applies every migration to a real database.',
+			'Developed the inbox and disposition module, audit trail, per-tenant RBAC, and an email worker with safe retries and bounce tracking.',
+			'Built the Flutter mobile app with Play Integrity–attested sign-in and Firebase push notifications.',
+			'Set up CI/CD, versioned releases, and per-client deployments, backed by 92 unit, integration, and Playwright e2e test files.'
+		]
+	},
+	{
+		number: '06',
+		name: 'Project management\nthat talks back.',
+		company: 'Poru',
+		year: 'SEP 2025 — PRESENT',
+		category: 'AI PRODUCT ENGINEERING',
+		description:
+			'An AI-powered ticketing and project management platform, with agents that can search, plan, and report.',
+		tags: ['Next.js 16', 'LangGraph', 'Supabase', 'pgvector'],
+		outcome: '~93%',
+		outcomeLabel: 'OF 500+ COMMITS AS LEAD DEVELOPER',
+		context:
+			'Poru grew from a ticketing tool into a platform with 47 pages, 58 API routes, and 65 migrations. I lead its development and its AI integration.',
+		contributions: [
+			'Built an agentic AI chat on LangGraph with tool calling and generative UI.',
+			'Built hybrid ticket search (pgvector + full-text + reciprocal rank fusion), kept fresh by an embedding queue.',
+			'Built Temporal Loom: a WBS tree with drag-and-drop, progress rollup, daily snapshots, S-curve reports, Excel export, and Google Sheets sync.',
+			'Built an MCP server exposing tickets and project data to AI agents over OAuth, plus two-way Freedcamp sync via an idempotent job queue.',
+			'Covered the platform with 129 Vitest unit-test files.'
+		]
+	},
+	{
 		number: '07',
 		name: 'Four players.\nOne jade table.',
 		company: 'Side project · Majong 3D',
@@ -162,7 +160,6 @@ export const projects: Project[] = [
 		tags: ['React Three Fiber', 'Colyseus', 'Node.js', 'Blender'],
 		outcome: '4-player',
 		outcomeLabel: 'SERVER-AUTHORITATIVE MULTIPLAYER',
-		variant: 'grid',
 		context:
 			'A full Mahjong game that runs in a browser tab, from game server to procedurally generated tiles.',
 		contributions: [
@@ -183,7 +180,6 @@ export const projects: Project[] = [
 		tags: ['Rust', 'Tauri 2', 'React 19', 'yt-dlp'],
 		outcome: '~4 MB',
 		outcomeLabel: 'INSTALLERS FOR WINDOWS, MACOS, LINUX',
-		variant: 'grid',
 		context:
 			'StreamQ started as a Python / Tkinter tool. I led an AI-assisted rewrite to Tauri 2. Source: github.com/ivanerror/streamq',
 		contributions: [
@@ -203,7 +199,6 @@ export const projects: Project[] = [
 		tags: ['Next.js 16', 'Three.js', 'GLSL', 'LLM API'],
 		outcome: '78 cards',
 		outcomeLabel: 'RENDERED IN A SINGLE INSTANCED MESH',
-		variant: 'mobile',
 		context: 'An interactive reading table built to run smoothly on phones and on a live stream.',
 		contributions: [
 			'Rendered all 78 cards in a single InstancedMesh with a custom bend shader, bloom, graphics tiers, and a WebGL fallback.',
@@ -222,7 +217,6 @@ export const projects: Project[] = [
 		tags: ['React 19', 'TypeScript', 'Vite', 'PWA'],
 		outcome: '235',
 		outcomeLabel: 'QUESTIONS, INCL. CLINICAL VIGNETTES',
-		variant: 'mobile',
 		context: 'A focused exam simulator that works offline and keeps learners coming back.',
 		contributions: [
 			'Built timer auto-submit, resumable sessions, and per-topic analysis, driven by auto-discovered JSON question packs.',
