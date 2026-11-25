@@ -79,7 +79,7 @@
 	<title>Gabriel Ivan Setyaputra — Software Engineer</title>
 	<meta
 		name="description"
-		content="Software engineer and technical leader building thoughtful web and mobile products. Explore Gabriel Ivan Setyaputra’s work at RADSoft and Grab."
+		content="Software engineer and technical leader building web, mobile, backend and AI products. Explore Gabriel Ivan Setyaputra’s work at RADSoft, Grab, and on independent products."
 	/>
 	<meta property="og:title" content="Gabriel Ivan — Systems in Motion" />
 	<meta
@@ -180,34 +180,40 @@
 					Good software is more than what you see.<br />It’s everything that makes it work.
 				</p>
 				<p>
-					I’m Gabriel Ivan Setyaputra, a software engineer based in Tulungagung, Indonesia. Over the
-					past 5+ years, I’ve built web and mobile products across consumer technology, fintech, and
-					investment management.
+					I’m Gabriel Ivan Setyaputra, a software engineer based in Jakarta, Indonesia. Over the
+					past 5+ years, I’ve shipped web, mobile, and backend products across consumer technology,
+					investment management, financial services, and e-office software.
 				</p>
 				<p>
-					At Grab, I learned to build for scale. At RADSoft, I’m shaping a platform from its
-					foundations—connecting frontend architecture, system design, and technical leadership.
+					At Grab, I learned to build for scale. At RADSoft, I lead PreTrade, a platform I built
+					from its foundations, and co-built ChatHub, a secure chat service for financial clients.
+					On my own, I lead Hermes E-Office and Poru end to end.
 				</p>
 				<p>
 					I care about clear interfaces, maintainable systems, and helping teams do their best work.
-					Lately, I’m exploring how agentic AI workflows can make software delivery more thoughtful
-					and productive.
+					Lately, that means putting AI to real use: agentic chat on LangGraph, hybrid vector search,
+					and MCP servers that let agents work with real project data.
 				</p>
 				<div class="expertise">
 					<div>
 						<span>01</span>
 						<h3>Frontend & architecture</h3>
-						<p>React · Next.js · TypeScript · Zustand</p>
+						<p>React · Next.js · SvelteKit · TypeScript · Zustand · Three.js</p>
 					</div>
 					<div>
 						<span>02</span>
-						<h3>Mobile & product</h3>
-						<p>Flutter · Dart · Design systems</p>
+						<h3>Mobile & desktop</h3>
+						<p>Flutter · Dart · Tauri · Server-Driven UI · Design systems</p>
 					</div>
 					<div>
 						<span>03</span>
-						<h3>Engineering & delivery</h3>
-						<p>System design · Docker · CI/CD · Technical leadership</p>
+						<h3>Backend & data</h3>
+						<p>Node.js · .NET · gRPC · WebSocket · PostgreSQL · Redis</p>
+					</div>
+					<div>
+						<span>04</span>
+						<h3>AI & delivery</h3>
+						<p>LangGraph · pgvector · MCP · Docker · CI/CD · Technical leadership</p>
 					</div>
 				</div>
 			</div>
@@ -269,7 +275,7 @@
 				<ellipse cx="320" cy="202" rx="235" ry="117" fill="url(#map-glow)" />
 				<g transform="translate(10 60) skewX(-18) scale(1 .7)">
 					<path d="M65 35H545V320H65Z" fill="url(#map-grid)" />
-					<!-- Stylized Java coastline; the marker sits on the southern side of East Java. -->
+					<!-- Stylized Java coastline; the marker group below is shifted onto Jakarta, on the northwest coast. -->
 					<path
 						d="M68 105L92 92L121 111L151 110L175 123L204 119L229 135L263 134L287 143L310 137L334 150L359 142L383 156L412 149L438 170L468 168L489 193L480 208L452 197L430 205L405 194L382 195L357 182L331 185L309 174L284 179L259 168L234 169L211 153L189 157L164 140L143 142L123 125L97 128L76 117Z"
 						fill="currentColor"
@@ -289,6 +295,7 @@
 						stroke-dasharray="3 4"
 					/>
 				</g>
+				<g transform="translate(-206 -50)">
 				<ellipse class="map-pulse" cx="321" cy="185" rx="27" ry="10" stroke="currentColor" />
 				<ellipse cx="321" cy="185" rx="13" ry="5" stroke="currentColor" opacity=".5" />
 				<path d="M321 182V131" stroke="currentColor" stroke-dasharray="2 4" />
@@ -305,7 +312,7 @@
 					fill="currentColor"
 					font-family="monospace"
 					font-size="10"
-					letter-spacing="2">TULUNGAGUNG</text
+					letter-spacing="2">JAKARTA</text
 				>
 				<text
 					x="381"
@@ -314,8 +321,9 @@
 					opacity=".6"
 					font-family="monospace"
 					font-size="7"
-					letter-spacing="1">EAST JAVA / INDONESIA</text
+					letter-spacing="1">DKI JAKARTA / INDONESIA</text
 				>
+				</g>
 			</svg>
 			<div class="contact-top">
 				<span class="section-index">03 / WHAT’S NEXT?</span><span class="availability"
@@ -327,9 +335,8 @@
 				<p>
 					Have a team, a challenge, or an idea in mind?<br />Let’s build something that matters.
 				</p>
-				<a href="https://www.linkedin.com/in/ivansetya/" target="_blank" rel="noreferrer"
-					>Let’s connect <span>↗</span></a
-				>
+				<a href={profile.linkedin} target="_blank" rel="noreferrer">Let’s connect <span>↗</span></a>
+				<a href={profile.github} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
 			</div>
 			<div class="contact-location">
 				<span>{profile.location}</span><span>ON-SITE · HYBRID · REMOTE</span>
